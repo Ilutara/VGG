@@ -120,7 +120,7 @@ def gen_mean_activity(base_dir):
 
 def get_mean_activity():
     """
-    Get mean activity for each channel(Red, Gree, Blue)
+    Get mean activity for each channel(Red, Green, Blue)
     """
     with open('mean.pkl', 'rb') as handle:
         return pickle.load(handle)
