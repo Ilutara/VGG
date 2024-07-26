@@ -365,7 +365,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('image_path', metavar = 'image-path',
                         help = 'ImageNet dataset path')
-    args = parser.parse_args()
+    
+    args = parser.parse_args(['image_path'])
 
     lsvrc2010 = LSVRC2010(args.image_path, 128)
 
