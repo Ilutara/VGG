@@ -22,22 +22,22 @@ from utils import gen_mean_activity
 from utils import Store
 from utils import read_vgg_conf
 
-class LSVRC2010:
+class CIFAR10:
     """
-    Read the train data of ILSVRC2010.
+    Read the train data of CIFAR10.
 
-    Considering the :py:path: is `~/datasets/ILSVRC2010`
+    Considering the :py:path: is `~/datasets/CIFAR10`
     this class assumes the folder structure as follows
 
     |____devkit-1.0
     | |____data
-    | | |____ILSVRC2010_validation_ground_truth.txt
+    | | |____CIFAR10_validation_ground_truth.txt
     | | |____meta.mat
-    |____ILSVRC2010_img_train
+    |____CIFAR10_img_train
     | |____n01443537
     | | |____n01443537_1.JPEG
-    |____ILSVRC2010_img_val
-    | |____ILSVRC2010_val_00000001.JPEG
+    |____CIFAR10_img_val
+    | |____CIFAR10_val_00000001.JPEG
     """
 
     def __init__(self, path, batch_size):
@@ -45,17 +45,17 @@ class LSVRC2010:
         Find which folder has what kind of images
         Find which image belongs to which folder and what category.
 
-        :param path: The directory path for the ILSVRC2010 training data
+        :param path: The directory path for the CIFAR10 training data
         """
-        self.logger = logging.getLogger('VGG.LSVRC2010')
+        self.logger = logging.getLogger('VGG.CIFAR10')
         self.batch_size = batch_size
         self.image_size = read_vgg_conf()['input_size'] + [3]
 
         # Directory paths
         self.base_dir = path
-        self.train_dir = os.path.join(path, 'ILSVRC2010_img_train')
-        self.val_dir = os.path.join(path, 'ILSVRC2010_img_val')
-        self.test_dir = os.path.join(path, 'ILSVRC2010_img_test')
+        self.train_dir = os.path.join(path, 'CIFAR10_img_train')
+        self.val_dir = os.path.join(path, 'CIFAR10_img_val')
+        self.test_dir = os.path.join(path, 'CIFAR10_img_test')
 
         # Store the folder name to label info
         self.wnid2label = {}
@@ -142,7 +142,7 @@ class LSVRC2010:
         Find the label of each validation image
         """
         with open(os.path.join(self.base_dir, 'devkit-1.0', 'data',
-                               'ILSVRC2010_validation_ground_truth.txt')) as f:
+                               'CIFAR10_validation_ground_truth.txt')) as f:
             for image, lsvrcid in zip(sorted(os.listdir(self.val_dir)), f):
                 self.image_names_val[image] = \
                     self.wnid2label[self.lsvrcid2wnid[int(lsvrcid.strip())]]
@@ -152,7 +152,7 @@ class LSVRC2010:
         Find the label of each test image
         """
         with open(os.path.join(self.base_dir, 'devkit-1.0', 'data',
-                               'ILSVRC2010_test_ground_truth.txt')) as f:
+                               'CIFAR10_test_ground_truth.txt')) as f:
             for image, lsvrcid in zip(sorted(os.listdir(self.test_dir)), f):
                 self.image_names_test[image] = \
                     self.wnid2label[self.lsvrcid2wnid[int(lsvrcid.strip())]]
@@ -326,7 +326,7 @@ class LSVRC2010:
         Where X is a list of 5 patches: each patch will have
         batch no of images. Y is the labels which size is batch size.
         """
-        logger_test = logging.getLogger('VGGTest.LSVRC2010')
+        logger_test = logging.getLogger('VGGTest.CIFAR10')
         batch_size = 1
         images = list(self.image_names_test.keys())
         def get_batch(idx):
@@ -368,13 +368,13 @@ if __name__ == '__main__':
     
     args = parser.parse_args(['image_path'])
 
-    lsvrc2010 = LSVRC2010(args.image_path, 128)
+    cifar10 = CIFAR10(args.image_path, 128)
 
-    image_cur_batch = lsvrc2010.gen_batch
+    image_cur_batch = cifar10.gen_batch
     first_batch = next(image_cur_batch)
     print("The first batch shape:", first_batch[0].shape)
     print("The first one hot vector shape:", first_batch[1].shape)
 
-    first_batch = lsvrc2010.get_batch_val
+    first_batch = cifar10.get_batch_val
     print("The first batch shape:", first_batch[0].shape)
     print("The first one hot vector shape:", first_batch[1].shape)
