@@ -12,7 +12,7 @@ import os
 import time
 
 # local modules
-from data import LSVRC2010
+from data import CIFAR10
 from logs import get_logger
 from utils import read_vgg_conf
 
@@ -334,7 +334,7 @@ class VGG:
         """
         self.build_graph()
 
-        lsvrc2010 = LSVRC2010(self.path, batch_size)
+        lsvrc2010 = CIFAR10(self.path, batch_size)
         saver = tf.train.Saver()
 
         init = tf.global_variables_initializer()
@@ -492,7 +492,7 @@ class VGG:
         graph_weights = self.get_graph_weights()
         self.build_graph_test()
 
-        lsvrc2010 = LSVRC2010(self.path, batch_size)
+        lsvrc2010 = CIFAR10(self.path, batch_size)
         saver = tf.train.Saver()
 
         with tf.Session() as sess:
